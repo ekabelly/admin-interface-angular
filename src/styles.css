@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+* {
+    margin: 0;
+}
+
+.clear-padding {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.container-fluid {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+.content {
+    height: 976.67px;
+}
+
+.pointer {
+    cursor: pointer;
+}

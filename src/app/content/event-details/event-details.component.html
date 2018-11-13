@@ -1,0 +1,19 @@
+<div class="main content">
+  <div class="col-md-8 col-md-offset-2 form-wrapper">
+
+    <div routerLink="volunteers" class="col-md-6 col-sm-6 col-xs-6 tab volunteers" routerLinkActive="activeTab">
+      <p class="pointer"> מתנדבים</p>
+    </div>
+
+    <div routerLink="edit" class="col-md-6 col-sm-6 col-xs-6 tab event-details" routerLinkActive="activeTab">
+      <p class="pointer">פרטי האירוע</p>
+    </div>
+
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="col-md-2 visible-md visible-lg">
+    <button class="btn btn-default back-to-events-btn" routerLink="/events">חזרה לאירועים <span class="glyphicon glyphicon-triangle-right vertical-a-m"></span></button>
+  </div>
+  
+</div>

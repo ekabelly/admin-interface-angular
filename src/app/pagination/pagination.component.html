@@ -1,0 +1,30 @@
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li *ngIf="lastPage > 1" [ngClass]="{disabled: currentPage == 1}" (click)="jumpToPage(1)"  class="pointer">
+        <a aria-label="עמוד ראשון">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li *ngIf="lastPage > 1" [ngClass]="{disabled: currentPage == 1}"  (click)="jumpToPage(currentPage - 1)"  class="pointer">
+        <a aria-label="הקודם">
+          <span aria-hidden="true">הקודם</span>
+        </a>
+      </li>
+      <li *ngIf="pages[0] > 0" [ngClass]="{active: currentPage === pages[0]}" (click)="jumpToPage(pages[0])" class="pointer"><a>{{pages[0]}}</a></li>
+      <li *ngIf="pages[1] > 1 && lastPage > 1" [ngClass]="{active: currentPage === pages[1]}" (click)="jumpToPage(pages[1])" class="pointer"><a>{{pages[1]}}</a></li>
+      <li *ngIf="pages[2] > 2 && lastPage > 2" [ngClass]="{active: currentPage === pages[2]}" (click)="jumpToPage(pages[2])" class="pointer"><a>{{pages[2]}}</a></li>
+      <li *ngIf="pages[3] > 3 && lastPage > 3" [ngClass]="{active: currentPage === pages[3]}" (click)="jumpToPage(pages[3])" class="pointer"><a>{{pages[3]}}</a></li>
+      <li *ngIf="pages[4] > 4 && lastPage > 4" [ngClass]="{active: currentPage === pages[4]}" (click)="jumpToPage(pages[4])" class="pointer"><a>{{pages[4]}}</a></li>
+      
+      <li *ngIf="lastPage > 1" [ngClass]="{disabled: currentPage === lastPage}" (click)="jumpToPage(currentPage + 1)"  class="pointer">
+        <a aria-label="הבא">
+          <span aria-hidden="true">הבא</span>
+        </a>
+      </li>
+      <li *ngIf="lastPage > 1" [ngClass]="{disabled: currentPage === lastPage}" (click)="jumpToPage(lastPage)"  class="pointer">
+          <a aria-label="עמוד אחרון">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+    </ul>
+  </nav>

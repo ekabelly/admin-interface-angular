@@ -1,0 +1,28 @@
+.main {
+    background-color: rgb(243, 242, 242);
+    height: 1146.67px;
+}
+
+.sidenav-list ul li a {
+    color: black;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.sidenav-list ul li a:hover {
+    color: white;
+    background-color: grey;
+}
+
+.text-lg {
+    font-size: 140%;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 0;
+    padding: 0; 
+}

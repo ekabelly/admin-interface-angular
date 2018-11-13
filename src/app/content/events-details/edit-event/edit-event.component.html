@@ -1,0 +1,202 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="onSave()" class="container-fluid">
+    <div class="row">
+
+      <div class="col-md-6" *ngFor="let personalType of personalTypes">
+        <label  class="inline-radio radio-label">
+          <input type="radio" formControlName="personalType" [value]="personalType"> {{ personalTypesDisplay[personalType] }}
+        </label>
+      </div>
+
+      <span class="form-sec-title">  מתאים למתנדבים </span>
+
+      <div class="form-section container-fluid">
+        <div class="row" formGroupName="volunteersTypes">
+
+          <div class="col-md-4" *ngFor="let item of volunteersTypes">
+            <label class="checkbox-inline checkbox-label">
+              <input type="checkbox" [formControlName]="item.name"><p> {{ item.translation }} </p>
+            </label>
+          </div>
+          
+        </div>
+        
+        <div formGroupName="volunteersNum">
+          <div class="col-md-6 mat-input-wrapper">
+            <mat-form-field>
+                <input type="number" min="1" matInput formControlName="max" placeholder="מספר מתנדבים מקסימלי">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6 mat-input-wrapper">
+            <mat-form-field>
+                <input type="number" min="1" matInput formControlName="min" placeholder="מספר מתנדבים מינימלי">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <span class="form-sec-title">  תיאור ההתנדבות </span>
+
+      <div class="form-section container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mat-input-wrapper" style="padding-top:10px;">
+              <mat-form-field>
+                  <input type="text" matInput  formControlName="eventTitle" placeholder="כותרת ההתנדבות (עד 50 תווים)">
+              </mat-form-field>
+            </div>
+
+            <div class="mat-input-wrapper">
+              <mat-form-field>
+                  <textarea matInput rows="4" formControlName="eventDesc" placeholder=" תיאור ההתנדבות (עד 80 תווים) "></textarea>
+              </mat-form-field>
+            </div>
+          
+            <div class="form-group pic-wrapper">
+              <!-- sample: https://images.pexels.com/photos/370799/pexels-photo-370799.jpeg?cs=srgb&dl=light-art-blue-370799.jpg&fm=jpg -->
+              <img width="100%" height="100%" src="" alt="תמונה">
+            </div>
+    
+            <div class="form-group">
+                <!-- <input type="file" placeholder="העלאת תמונה"> -->
+                <button class="btn btn-default"> העלאת תמונה</button>   גודל מומלץ 600X 400
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <span class="form-sec-title">  מתי? </span>
+
+      <div class="form-section time-section container-fluid">
+        <div class="row">
+          <div formGroupName="time">
+            
+            <div class="col-md-6" *ngFor="let duration of durations">
+              <label  class="inline-radio radio-label-smaller">
+                <input type="radio" formControlName="duration" [value]="duration"> {{ displayDuration[duration] }}
+              </label>
+            </div>
+
+          
+            <div class="col-md-6 mat-input-wrapper" >
+              <mat-form-field>
+                <input type="time" formControlName="time" matInput placeholder="בחר שעה">
+              </mat-form-field>
+            </div>
+          
+            <div class="col-md-6 mat-input-wrapper">
+              <mat-form-field>
+                <input matInput  formControlName="date" [matDatepicker]="picker" placeholder="בחר תאריך">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+          </div>
+    
+          <div class="col-md-12 immediate-checkbox-wrapper">
+            <label class="checkbox-label checkbox-inline immediate-checkbox">
+              <input type="checkbox" formControlName="urgent">
+              <p> התנדבות מיידית</p>
+            </label>
+            <p>ההתנדבות תופיע בראש הרשימה באפליקציה עם תוית מיידי</p>
+          </div>
+    
+        </div>
+      </div>
+
+      <span class="form-sec-title">  איפה? </span>
+
+      <div class="form-section container-fluid">
+        <div class="row">
+            <div class="col-md-4" *ngFor="let locationType of locationTypes">
+              <label class="inline-radio radio-label-smaller">
+                <input type="radio" (click)="changeLocationNum(locationType)" formControlName="locationTypes" [value]="locationType"> {{ locationTypesDisplay[locationType] }}
+              </label>
+            </div>
+          <div class="col-md-12">
+            <button class="btn btn-default" *ngIf="form.value.locationTypes ==='multiple'" (click)="addLocation(null)">הוסף כתובת</button>
+          </div>
+          
+          <div formArrayName="locations">
+            <div *ngFor="let item of form.get('locations').controls; let i = index">
+              <div class="row" [formGroupName]="i">
+                <div class="col-md-4 mat-input-wrapper">
+                  <mat-form-field>
+                      <input type="text" matInput  formControlName="streetNum" placeholder="מספר בית">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4 mat-input-wrapper">
+                  <mat-form-field>
+                      <input type="text" matInput  formControlName="street" placeholder="רחוב">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4 mat-input-wrapper">
+                  <mat-form-field>
+                      <input type="text" matInput  formControlName="city" placeholder="עיר">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <span class="form-sec-title">  פרטי התקשרות </span>
+
+      <div class="containter-fluid form-section">
+        <div class="row" formGroupName="contact">
+          <div class="col-md-6 mat-input-wrapper">
+            <mat-form-field>
+                <input type="text" matInput  formControlName="mobile" placeholder="נייד">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 mat-input-wrapper">
+            <mat-form-field>
+                <input type="text" matInput  formControlName="phone" placeholder="טלפון">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <span class="form-sec-title"> כלי רכב </span>
+
+      <div class="container-fluid form-section">  
+        <div class="row vehicles-wrapper" formGroupName="vehicles">
+
+          <div  class="col-md-4 cards-wrapper" *ngFor="let item of vehicles">
+              <mat-card [ngClass]="{'selected-card': form.get('vehicles').value[item.name]}" class="pointer card" (click)="modifyVehicle(item.name)">{{ item.translation }} </mat-card>
+          </div>
+          
+        </div>
+      </div>
+
+      <span class="form-sec-title"> תגיות </span>
+
+      <div class="container-fluid form-section">  
+          <div class="row tags-wrapper" formArrayName="tags">
+            something is not working here. this is the next task!
+            <div  class="col-md-4 cards-wrapper" *ngFor="let item of form.get('tags').controls; let i = index" [formGroupName]="i">
+                <mat-card formControlName="value" class="pointer card"></mat-card>
+            </div>
+            
+          </div>
+        </div>
+
+      <div class="form-section btn-form-section container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-default" type="button" (click)="resetForm()"s *ngIf="isNew">נקה טופס</button>
+            <button class="btn btn-default" type="submit">שמור</button>    
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+  </form>
+</div>
+
+

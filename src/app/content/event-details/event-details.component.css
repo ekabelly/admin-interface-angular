@@ -1,0 +1,50 @@
+.main {
+    background: grey;
+}
+
+.form-wrapper {
+    background-color: white;
+    height: auto;
+    padding: 0;
+}
+
+.tab {
+    max-height: 90px;
+    background-color: grey;
+    text-align: center;
+    font-size: 2em;
+    padding: 20px;
+}
+
+.tab.activeTab {
+    background-color: white;
+}
+
+[routerLink] {
+    z-index: 900;
+}
+
+.back-to-events-btn {
+    width: 100%;
+    background-color: rgb(243, 242, 242);
+}
+
+.back-to-events-btn:hover {
+    background-color: grey;
+}
+
+.vertical-a-m {
+    vertical-align: middle;
+}
+
+@media screen and (min-width: 768px) {
+    .main {
+        padding-top: 20px;
+    }
+}
+
+@media screen and (max-width: 353px) {
+    .event-details {
+        padding-top: 0;
+    }
+}

@@ -1,0 +1,15 @@
+* {
+    text-align: center;
+    color: black !important;
+}
+
+.pagination>.active>a {
+    background-color: grey;
+    border-color: rgb(243, 242, 242);
+    color: white;
+}
+
+.pointer {
+    cursor: pointer;
+}
+

@@ -1,0 +1,64 @@
+.main {
+    background-color: grey;
+    /* height: calc(100vh - 170px); */
+}
+
+.events-table-wrapper {
+    height: 800px;
+    overflow: auto;
+    width: 100%;
+    /* padding-bottom: 20px;
+    padding-top: 20px; */
+}
+
+.events-table {
+    border-collapse:separate; 
+    border-spacing:0 1em;
+    table-layout: fixed;
+}
+
+.events-table tr {
+    background-color: white;
+    color: black;
+    height: 50px;
+}
+
+.events-table thead tr:first-child {
+    background-color: transparent;
+    font-size: 120%;
+}
+
+
+.events-table tbody tr:hover {
+    background-color: rgb(243, 242, 242);
+}
+
+.events-table td, .events-table th {
+    text-align: center;
+    width: 20%;
+    word-wrap: break-word;
+}
+
+.events-table tr td {
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+.select-wrapper, .th-wrapper {
+    width: 20%;
+    float: left;
+}
+
+.select-wrapper select {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.th-wrapper {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+    font-size: 120%;
+    color: black;
+}

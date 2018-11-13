@@ -1,0 +1,91 @@
+form {
+    text-align: right;
+    direction: rtl;
+}
+
+.form-sec-title {
+    padding: 0 5%;
+    font-size: 3.5em;
+    font-weight: 700;
+}
+
+.form-section, .form-section div {
+    background-color: gainsboro;
+}
+
+.checkbox-label p { 
+    padding-right: 0.6em;
+}
+
+.radio-label, .checkbox-label {
+    font-size: 3em;
+    font-weight: 400;
+}
+
+.volunteer-num-label {
+    width: 100%;
+    font-size: 2em;
+}
+
+input[type=radio], input[type=checkbox]{
+    transform:scale(2);
+    vertical-align: middle;
+}
+
+input[type=checkbox] {
+    margin-top: 0.66em;
+    margin-left: 0px;
+}
+
+.immediate-checkbox {
+    margin-top:0.33em;
+    height: 50px;
+}
+
+.immediate-checkbox p {
+    margin-bottom: 0;
+}
+
+.event-desc-label, .radio-label-smaller {
+    font-size: 2em;
+}
+
+.time-section mat-form-field {
+    padding-top: 3%;
+}
+
+.mat-input-wrapper mat-form-field {
+    font-size: 1.2em;
+    width: 100%;
+    text-align: right !important;
+}
+
+.btn-form-section button.btn {
+    float: left;
+}
+
+.vehicles-wrapper, .tags-wrapper {
+    padding: 2%;
+}
+
+.cards-wrapper {
+    padding: 1%;
+}
+
+.card:hover {
+    background-color: grey;
+}
+
+.selected-card {
+    background-color: grey;
+}
+
+@media screen and (min-width: 768px) {
+
+    .pic-wrapper {
+        height: 400px;
+        background-color: white !important;
+        border: 1px solid black;
+        box-sizing: border-box;
+    }
+}

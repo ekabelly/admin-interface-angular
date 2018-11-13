@@ -1,0 +1,66 @@
+<app-spinner *ngIf="!isData"></app-spinner>
+<div class="main content" *ngIf="isData">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <br>
+      <div class="select-wrapper">
+        <select class="form-control">
+            <option>1</option>
+          </select>
+      </div>
+      <div class="select-wrapper">
+          <select class="form-control">
+              <option>1</option>
+            </select>
+        </div>
+        <div class="select-wrapper">
+            <select class="form-control">
+                <option>1</option>
+              </select>
+          </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="th-wrapper">
+        <strong>סטטוס</strong>
+      </div>
+      <div class="th-wrapper">
+        <strong>רשומים/קבל רחב</strong>
+      </div>
+      <div class="th-wrapper">
+        <strong>תאריך</strong>
+      </div>
+      <div class="th-wrapper">
+        <strong>מיקום</strong>
+      </div>
+      <div class="th-wrapper">
+        <strong>שם האירוע</strong>
+      </div>
+      <div class="events-table-wrapper">
+          <table class="events-table">
+              <!-- <thead>
+                <tr>
+                  <th>סטטוס</th>
+                  <th>רשומים/קהל רחב</th>
+                  <th>תאריך</th>
+                  <th>מיקום</th>
+                  <th>שם האירוע</th>
+                </tr>
+              </thead> -->
+          
+              <tbody>
+                <tr class="pointer" [routerLink]="['/', item.id ,'event']" *ngFor="let item of filteredData | pagination: maxRows:currentPage">
+                  <td>{{  item.postId }}</td>
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.email }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.body }}</td>
+                </tr>
+              </tbody>
+            </table>
+      </div>
+      <app-pagination (changePage)="changePage($event)" [data]="filteredData" [maxRows]="maxRows" [location]="'events'"></app-pagination>
+    </div>
+  </div>
+</div>
