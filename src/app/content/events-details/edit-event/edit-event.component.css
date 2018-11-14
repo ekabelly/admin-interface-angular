@@ -60,6 +60,16 @@ input[type=checkbox] {
     text-align: right !important;
 }
 
+.mat-input-wrapper-btn mat-form-field {
+    font-size: 1.2em;
+    width: 80%;
+    text-align: right !important;
+}
+
+.mat-input-wrapper-btn button {
+    width: 20%;
+}
+
 .btn-form-section button.btn {
     float: left;
 }

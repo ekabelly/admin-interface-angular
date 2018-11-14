@@ -45,7 +45,7 @@ export class EditEventComponent implements OnInit {
       truck: false,
       motorcycle: false
     }),
-    tags: this.fb.array([this.fb.group(this.createTag())])
+    tags: this.fb.array([])
   })
 
   //radio
@@ -89,31 +89,30 @@ export class EditEventComponent implements OnInit {
     {name:'supports', translation:'תומכים'}
   ];
 
-  tags: FormArray;
+  tags: any[];
 
   constructor(private dataService: DataService, private route:ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.route.parent.params.subscribe((params:Params) =>{
-      this.handleForm(params['id']);
-    })
+    this.route.parent.params.subscribe((params:Params) =>
+      this.handleForm(params['id']))
     console.log(this.form);
   }
 
   handleForm(id){
-      if(id > 0 ){
-        this.dataService.fetchComment(id).subscribe((data) => {
-          setTimeout(()=>this.setForm(data), 0);
-        });
+    this.fetchTags();
+      if(Number(id) > 0 ){
+        this.dataService.fetchComment(id).subscribe((data) =>
+          setTimeout(()=>this.setForm(data), 0));
       }
       else{
-        const emptyForm = {
-          volunteersTypes:{},
-          volunteersNum:{},
-          time:{}
-        };
+        // const emptyForm = {
+        //   volunteersTypes:{},
+        //   volunteersNum:{},
+        //   time:{}
+        // };
         this.isNew = true;
-        setTimeout(()=>this.setForm(emptyForm), 0);
+        // setTimeout(()=>this.setForm(emptyForm), 0);
       }
   }
 
@@ -142,9 +141,17 @@ export class EditEventComponent implements OnInit {
       locationTypes: data.locationTypes || 'single',
       locations: data.locations || [{}]
     })
-    
-    // this.fetchTags();
+    data.tags.forEach(tag=>this.markTag(tag));
     // this.form.patchValue({time:{dates:[new Date().toISOString().slice(0, 10)]}});
+  }
+
+  markTag(tagNum){
+    for(let i = 0; i < this.tags.length; i++){
+      if(this.tags[i].value == tagNum){
+        this.tags[i].selected = true;
+        break;
+      }
+    }
   }
 
   changeLocationNum(locationType){
@@ -181,17 +188,15 @@ export class EditEventComponent implements OnInit {
   }
 
   fetchTags(){
-    this.dataService.fetchTags().then((data: NameNumPair[])=> {
-      
-      const dataFBArr = data.map(({name, value})=>this.fb.group({name, value}));
-      console.log(dataFBArr, 'data');
-      const tags = <FormArray>this.form.get('tags');
-      tags.patchValue(data);
-      console.log(tags, 'tags');
+    this.dataService.fetchTags().then((data)=> {
+      this.tags = data.map(x=>{
+        x.selected = false;
+        return x;
+      });
     })
   }
 
-  createTag() :NameNumPair {
+  createTag(){
     return {
       name:'',
       value:null
@@ -208,7 +213,25 @@ export class EditEventComponent implements OnInit {
     this.form.get('vehicles').patchValue({[item]: !this.form.get('vehicles').value[item]});
   }
 
+  modifyTag(index){
+    this.tags[index].selected = !this.tags[index].selected;
+  }
+
+  addTag(tag: string){
+    this.dataService.addTag(tag).then(data=>
+      this.tags = data.map((item, i)=>{
+        if(this.tags[i]){
+          item.selected = this.tags[i].selected;
+        }else{
+          item.selected = true;
+        }
+        return item;
+      }))
+  }
+
   onSave(){
+    this.form.get('tags').patchValue([]);
+    this.tags.forEach(x=>{if(x.selected) this.form.get('tags').value.push(x.value)});
     console.log(this.form);
   }
 }
