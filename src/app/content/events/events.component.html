@@ -50,12 +50,16 @@
               </thead> -->
           
               <tbody>
-                <tr class="pointer" [routerLink]="['/', item.id ,'event']" *ngFor="let item of filteredData | pagination: maxRows:currentPage">
-                  <td>{{  item.postId }}</td>
-                  <td>{{ item.id }}</td>
-                  <td>{{ item.email }}</td>
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.body }}</td>
+                <tr class="pointer" [routerLink]="['/', item.key ,'event']" *ngFor="let item of filteredData | pagination: maxRows:currentPage; let i = index">
+                  <td>1</td>
+                  <td> {{ config.eventTypes[item.type].translation }} </td>
+                  <td>{{ item.time.date }}</td>
+                  <td style="direction: rtl;">  
+                      <ol>
+                        <li  *ngFor="let x of item.locations">{{ x.street + ' ' + x.houseNum + ', ' +x.city }} </li>
+                      </ol>
+                    </td>
+                  <td>{{ item.title }}</td>
                 </tr>
               </tbody>
             </table>

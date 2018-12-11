@@ -2,9 +2,9 @@
   <form [formGroup]="form" (ngSubmit)="onSave()" class="container-fluid">
     <div class="row">
 
-      <div class="col-md-6" *ngFor="let personalType of personalTypes">
+      <div class="col-md-6" *ngFor="let item of config.eventTypes; let i = index;">
         <label  class="inline-radio radio-label">
-          <input type="radio" formControlName="personalType" [value]="personalType"> {{ personalTypesDisplay[personalType] }}
+          <input type="radio" formControlName="type" [value]="item"> {{ item.translation }}
         </label>
       </div>
 
@@ -43,13 +43,13 @@
           <div class="col-md-12">
             <div class="mat-input-wrapper" style="padding-top:10px;">
               <mat-form-field>
-                  <input type="text" matInput  formControlName="eventTitle" placeholder="כותרת ההתנדבות (עד 50 תווים)">
+                  <input type="text" matInput  formControlName="title" placeholder="כותרת ההתנדבות (עד 50 תווים)">
               </mat-form-field>
             </div>
 
             <div class="mat-input-wrapper">
               <mat-form-field>
-                  <textarea matInput rows="4" formControlName="eventDesc" placeholder=" תיאור ההתנדבות (עד 80 תווים) "></textarea>
+                  <textarea matInput rows="4" formControlName="desc" placeholder=" תיאור ההתנדבות (עד 80 תווים) "></textarea>
               </mat-form-field>
             </div>
           
@@ -73,9 +73,9 @@
         <div class="row">
           <div formGroupName="time">
             
-            <div class="col-md-6" *ngFor="let duration of durations">
+            <div class="col-md-6" *ngFor="let duration of config.duration">
               <label  class="inline-radio radio-label-smaller">
-                <input type="radio" formControlName="duration" [value]="duration"> {{ displayDuration[duration] }}
+                <input type="radio" formControlName="duration" [value]="duration.name"> {{ duration.translation }}
               </label>
             </div>
 
@@ -125,7 +125,7 @@
               <div class="row" [formGroupName]="i">
                 <div class="col-md-4 mat-input-wrapper">
                   <mat-form-field>
-                      <input type="text" matInput  formControlName="streetNum" placeholder="מספר בית">
+                      <input type="text" matInput  formControlName="houseNum" placeholder="מספר בית">
                   </mat-form-field>
                 </div>
                 <div class="col-md-4 mat-input-wrapper">
@@ -166,8 +166,8 @@
       <div class="container-fluid form-section">  
         <div class="row vehicles-wrapper" formGroupName="vehicles">
 
-          <div  class="col-md-4 cards-wrapper" *ngFor="let item of vehicles">
-              <mat-card [ngClass]="{'selected-card': form.get('vehicles').value[item.name]}" class="pointer card" (click)="modifyVehicle(item.name)">{{ item.translation }} </mat-card>
+          <div  class="col-md-4 cards-wrapper" *ngFor="let item of vehiclesArr">
+              <mat-card [ngClass]="{'selected-card': form.get('vehicles').value[item.name]}" [fromControlName]="item.name" class="pointer card" (click)="modifyVehicle(item.name)">{{ item.translation }} </mat-card>
           </div>
           
         </div>

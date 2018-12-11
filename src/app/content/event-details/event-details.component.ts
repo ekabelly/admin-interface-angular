@@ -21,7 +21,7 @@ export class EventDetailsComponent implements OnInit {
       this.mode = window.location.pathname.split('/')[3];
 
       if(params['id'] != 0 && Number(params['id']) !== null){
-        this.dataService.fetchComment(params['id']).subscribe((data) =>{
+        this.dataService.fetchEvent(params['id']).subscribe((data) =>{
           this.isEvent = true;
           this.event = data;
         });

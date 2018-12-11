@@ -3,6 +3,11 @@ interface NameValuePair {
     value: number
 }
 
+export interface Tag {
+    name:"",
+    translation:""
+}
+
 interface volunteer {
     name: string
 }
@@ -10,11 +15,11 @@ interface volunteer {
 interface Location {
     city: string,
     street: string,
-    streetNumber: number
+    houseNum: number
 }
 
 export interface Event {
-    type: NameValuePair,
+    type: number,
     volunteers: {
         min: number,
         max: number,
@@ -24,13 +29,14 @@ export interface Event {
     desc: string,
     picUrl: string,
     contact: { phone: string, mobile: string },
-    vehicle: NameValuePair,
-    tags: NameValuePair[],
+    vehicles: number[],
+    tags: number[],
     locations: Location[],
     time: {
-        dates: Date[],
-        duration: NameValuePair,
+        date: Date,
+        duration: number,
         frequency: string
     },
-    usgent: boolean
+    urgent: boolean,
+    volunteersTypes: number[]
 }

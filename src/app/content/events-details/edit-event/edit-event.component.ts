@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../../../models/event';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { DataService } from 'src/app/services/data.service';
-import { ActivatedRoute, Params } from '@angular/router';
-import { NameNumPair } from 'src/app/models/namenumpair';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-event',
@@ -23,9 +22,9 @@ export class EditEventComponent implements OnInit {
       'min': [1, [Validators.required, Validators.min(1)]],
       'max': [4, Validators.min(1)]
     }),
-    eventTitle: ['', [Validators.required, Validators.maxLength(50)]],
-    eventDesc: ['', Validators.maxLength(80)],
-    personalType: ['volunteers', Validators.required],
+    title: ['', [Validators.required, Validators.maxLength(50)]],
+    desc: ['', Validators.maxLength(80)],
+    type: [1, Validators.required],
     time: this.fb.group({
       date: [null, Validators.required],
       time: null,
@@ -40,7 +39,7 @@ export class EditEventComponent implements OnInit {
     }),
     vehicles: this.fb.group({
       private: false,
-      van: false,
+      commercial: false,
       bikes: false,
       truck: false,
       motorcycle: false
@@ -48,14 +47,6 @@ export class EditEventComponent implements OnInit {
     tags: this.fb.array([])
   })
 
-  //radio
-  durations: string[] = ['oneTime', 'continious'];
-  displayDuration = {
-    oneTime: 'חד פעמית',
-    continious: 'מתמשכת' 
-  };
-
-  //checkboxes
   locationTypes: string[] = [
     'single',
     'dou',
@@ -68,90 +59,111 @@ export class EditEventComponent implements OnInit {
   };
   locations: FormArray;
 
-  vehicles: { name: string, translation: string}[] = [
-    { name:'private', translation:'רכב פרטי'} ,
-    { name:'van', translation:'רכב מסחרי' },
-    { name: 'bikes', translation: 'אופניים' },
-    { name: 'truck', translation: 'משאית' },
-    { name: 'motorcycle', translation: 'אופנוע'}
-  ]
-
-  //radio
-  personalTypes: string[] = ['open', 'volunteers'];
-  personalTypesDisplay = {
-    open:'קהל רחב',
-    volunteers: 'מתנדבים רשומים'
+  //config:
+  config = {
+    volunteersTypes:[],
+    eventTypes:[],
+    tags: [],
+    vehicles: [],
+    duration: []
   };
 
-  volunteersTypes = [
-    {name:'activePlus', translation:'פעילים+'}, 
-    {name:'active', translation:'פעילים'},
-    {name:'supports', translation:'תומכים'}
-  ];
-
+  volunteersTypes: any[] = [];
   tags: any[];
+  vehiclesArr: any[];
+  vehicles;
 
-  constructor(private dataService: DataService, private route:ActivatedRoute, private fb: FormBuilder) { }
+  constructor(private dataService: DataService, private route:ActivatedRoute, private fb: FormBuilder, private router: Router) { }
 
   ngOnInit() {
     this.route.parent.params.subscribe((params:Params) =>
-      this.handleForm(params['id']))
-    console.log(this.form);
+      this.fetchConfig(params['id']))
+  }
+
+  createLocation(){
+    return {
+      city:['', Validators.required],
+      street:['', Validators.required],
+      houseNum:''
+    }
+  }
+
+  fetchConfig(id){
+    this.dataService.fetchConfig().subscribe((config: any)=> {
+      this.config = config;
+      this.setVehicles(config.vehicles);
+      this.setTags(config.tags);
+      this.setVolunteersTypes(config.volunteersTypes)
+      this.handleForm(id);
+    })
+  }
+
+  setVolunteersTypes(volunteersTypes){
+    this.volunteersTypes = Object.values(volunteersTypes);
+  }
+
+  setVehicles(vehicles){
+    this.vehicles = vehicles;
+    this.vehiclesArr = Object.keys(vehicles).map((vehicleNum) => ({
+        name: vehicles[vehicleNum].name,
+        translation: vehicles[vehicleNum].translation,
+        value: vehicleNum
+    }));
+  }
+
+  setTags(tags){
+    this.tags = Object.keys(tags).map(tagKey=>({
+      selected: false,
+      name: tags[tagKey].translation,
+      value: tagKey
+    }));
   }
 
   handleForm(id){
-    this.fetchTags();
-      if(Number(id) > 0 ){
-        this.dataService.fetchComment(id).subscribe((data) =>
-          setTimeout(()=>this.setForm(data), 0));
-      }
-      else{
-        // const emptyForm = {
-        //   volunteersTypes:{},
-        //   volunteersNum:{},
-        //   time:{}
-        // };
-        this.isNew = true;
-        // setTimeout(()=>this.setForm(emptyForm), 0);
-      }
+    console.log(this.form, 'form');
+    if(id != 0 ){
+      this.dataService.fetchEvent(id).subscribe(
+        (event: Event) =>{
+            console.log(event);
+           setTimeout(()=>this.setForm(event), 0)})
+    }
+    else{
+      this.isNew = true;
+      this.resetForm();
+    }
   }
-
-  setForm(data){
-    // console.log(data, 'data')
+  
+  setForm(data: Event){
+    // console.log(data, 'event');
     const isDate = data.time.date;
     this.form.patchValue({
-      'volunteersTypes':  {
-        'active': data.volunteersTypes.active || false,
-        'supports': data.volunteersTypes.supports|| false,
-        'activePlus': data.volunteersTypes.activePlus || false
-      },
+      type: this.config.eventTypes[data.type],
       'volunteersNum':  {
-        'min': data.volunteersNum.min || 0,
-        'max': data.volunteersNum.max || 4
+        'min': data.volunteers.min || 0,
+        'max': data.volunteers.max || 4
       },
-      eventTitle: data.eventTitle || '',
-      eventDesc: data.eventDesc || '',
-      personalType: data.personalType || 'volunteers',
+      contact: data.contact,
+      title: data.title || '',
+      desc: data.desc || '',
       time: {
-        date: isDate ? data.time.date.toISOString().slice(0, 10) : null,
-        time: isDate ? data.time.date.toISOString().slice(11, 16) : null,
-        duration: data.time.duration || 'oneTime'
+        date: isDate ? data.time.date : null,
+        time: isDate ? data.time.date : null,
+        duration: this.config.duration[data.time.duration].name || 'oneTime'
       },
       urgent: data.urgent || false,
-      locationTypes: data.locationTypes || 'single',
+      locationTypes: data.locations.length > 2 ? 'multiple' : data.locations.length < 2 ? 'single' : 'dou' || 'single',
       locations: data.locations || [{}]
-    })
-    data.tags.forEach(tag=>this.markTag(tag));
-    // this.form.patchValue({time:{dates:[new Date().toISOString().slice(0, 10)]}});
-  }
+    });
+    data.tags.forEach((tag)=>
+      this.markTag(tag));
+    data.volunteersTypes.forEach((x: number)=>
+      this.form.get('volunteersTypes').get(this.config.volunteersTypes[x].name).patchValue(true));
 
-  markTag(tagNum){
-    for(let i = 0; i < this.tags.length; i++){
-      if(this.tags[i].value == tagNum){
-        this.tags[i].selected = true;
-        break;
-      }
-    }
+    data.vehicles.forEach((vehicleNum)=>{
+      let x = this.config.vehicles[vehicleNum].name;
+      this.form.get('vehicles').get(x).patchValue(true);
+    })
+    // this.form.patchValue({time:{dates:[new Date().toISOString().slice(0, 10)]}});
   }
 
   changeLocationNum(locationType){
@@ -179,36 +191,6 @@ export class EditEventComponent implements OnInit {
 
   }
 
-  createLocation(){
-    return {
-      city:['', Validators.required],
-      street:['', Validators.required],
-      streetNum:''
-    }
-  }
-
-  fetchTags(){
-    this.dataService.fetchTags().then((data)=> {
-      this.tags = data.map(x=>{
-        x.selected = false;
-        return x;
-      });
-    })
-  }
-
-  createTag(){
-    return {
-      name:'',
-      value:null
-    }
-  }
-
-  resetForm(){
-    if(this.isNew){
-      this.form.reset();
-    } 
-  }
-
   modifyVehicle(item){
     this.form.get('vehicles').patchValue({[item]: !this.form.get('vehicles').value[item]});
   }
@@ -217,21 +199,93 @@ export class EditEventComponent implements OnInit {
     this.tags[index].selected = !this.tags[index].selected;
   }
 
+  markTag(tagNum){
+    for(let i = 0; i < this.tags.length; i++){
+      if(this.tags[i].value == tagNum){
+        this.tags[i].selected = true;
+        this.form.get('tags').value.push(tagNum);
+        break;
+      }
+    }
+  }
+
   addTag(tag: string){
-    this.dataService.addTag(tag).then(data=>
-      this.tags = data.map((item, i)=>{
+    this.dataService.addTag(tag).then(data=>{
+      this.tags = Object.keys(data).map((itemName, i)=>{
         if(this.tags[i]){
-          item.selected = this.tags[i].selected;
+          data[itemName].selected = this.tags[i].selected;
         }else{
-          item.selected = true;
+          data[itemName].selected = true;
         }
-        return item;
-      }))
+        data[itemName].value = itemName;
+        data[itemName].name = data[itemName].translation;
+        return data[itemName];
+      })
+    });
+  }
+
+  resetForm(){
+    if(this.isNew){ //reset form is only viable when  its a new item
+      this.form.reset();
+      this.form.patchValue({
+        type: this.config.eventTypes[1],
+        volunteersTypes:{
+          active: true
+        },
+        time:{
+          duration:'oneTime'
+        },
+        locationTypes:'single'
+      });
+    }
+  }
+
+  createArr(item){
+    const items = this.form.value[item];
+    let x = Object.keys(items).filter(itemName=>items[itemName]);
+    x = x.map(itemName=>Object.keys(this.config[item]).find((key)=>this.config[item][key].name === itemName));
+    return x;
+  }
+
+  insertTagsToForm(){
+    this.form.get('tags').patchValue([]);
+    this.tags.forEach(x=>{if(x.selected) this.form.get('tags').value.push(x.value)});
+  }
+
+  transformVolunteerTypes(){
+    const { volunteersTypes } = this.form.value
+    return Object.keys(volunteersTypes).filter(key=>volunteersTypes[key]).map(type=>{
+      if(type === 'activePlus') return 13;
+      if(type === 'active') return 11;
+      if(type === 'supports') return 12;
+    });
   }
 
   onSave(){
-    this.form.get('tags').patchValue([]);
-    this.tags.forEach(x=>{if(x.selected) this.form.get('tags').value.push(x.value)});
-    console.log(this.form);
+    this.insertTagsToForm();
+    const { title, type, desc, locations, contact, urgent, tags, time, volunteersNum } = this.form.value;
+    const event = {
+      title,
+      desc,
+      picUrl: "",
+      contact,
+      urgent,
+      locations,
+      vehicles: this.createArr('vehicles'),
+      tags,
+      volunteersTypes: this.transformVolunteerTypes(),
+      type: type.name === 'open' ? 0 : 1,
+      time: {
+        date: [time.date],
+        time: time.time,
+        duration: time.duration === 'oneTime' ? 0 : 1
+      },
+      volunteers: volunteersNum
+    }
+    console.log(event, 'save');
+    this.dataService.pushEvent(event).subscribe(res=>{
+      console.log(res);
+      // this.router.navigate(['/events']);
+    });
   }
 }
