@@ -35,7 +35,7 @@ export class EventsComponent implements OnInit {
     this.dataService.fetchEvents().subscribe(
       (data) =>{
         data = Object.keys(data).map(key=>{
-          data[key].key = key;
+          data[key].key = key;  //for example: data[0].key = 0 
           return data[key];
         });
         console.log(data);

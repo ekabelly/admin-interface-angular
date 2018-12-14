@@ -22,7 +22,7 @@
   </div>
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
-      <div class="th-wrapper">
+      <!-- <div class="th-wrapper">
         <strong>סטטוס</strong>
       </div>
       <div class="th-wrapper">
@@ -36,10 +36,10 @@
       </div>
       <div class="th-wrapper">
         <strong>שם האירוע</strong>
-      </div>
+      </div> -->
       <div class="events-table-wrapper">
           <table class="events-table">
-              <!-- <thead>
+              <thead>
                 <tr>
                   <th>סטטוס</th>
                   <th>רשומים/קהל רחב</th>
@@ -47,7 +47,7 @@
                   <th>מיקום</th>
                   <th>שם האירוע</th>
                 </tr>
-              </thead> -->
+              </thead>
           
               <tbody>
                 <tr class="pointer" [routerLink]="['/', item.key ,'event']" *ngFor="let item of filteredData | pagination: maxRows:currentPage; let i = index">

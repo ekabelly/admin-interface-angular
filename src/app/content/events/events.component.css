@@ -40,8 +40,27 @@
 }
 
 .events-table tr td {
-    border: 1px solid black;
     box-sizing: border-box;
+    border-top: 1px solid rgba(0,0,0,0.3);
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+ }
+ .events-table tr td:nth-child(1), .events-table tr td:nth-child(5), .events-table tr td:nth-child(3) {
+    border-left: 1px solid rgba(0,0,0,0.3);
+    border-right: 1px solid rgba(0,0,0,0.3);
+ }
+
+.events-table tr td:nth-child(1) {
+    border-radius: 10px 0 0 10px;
+}
+
+.events-table tr td:nth-child(5) {
+    border-radius: 0 10px 10px 0;
+}
+
+.events-table thead th {
+    background-color: grey;
+    position: sticky;
+    top: 0;
 }
 
 .select-wrapper, .th-wrapper {

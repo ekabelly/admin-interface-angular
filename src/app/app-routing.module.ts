@@ -7,6 +7,7 @@ import { EventsComponent } from "./content/events/events.component";
 import { EventDetailsComponent } from "./content/event-details/event-details.component";
 import { EditEventComponent } from "./content/events-details/edit-event/edit-event.component";
 import { VolunteersComponent } from "./content/events-details/volunteers/volunteers.component";
+import { TestComponent } from "./test/test.component";
 
 //import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
 
@@ -33,6 +34,7 @@ const appRoute: Routes = [
     //   { path: ':id/edit', component: EditServerComponent, canDeactivate:[CanDeactivateGuard] }
     // ] },
     // { path: 'not-found', component: PageNotFoundComponent },
+    { path:'test', component: TestComponent },
     { path: 'not-found', component: ErrorPageComponent, data: { messege:'Page Not Foun!d' } },
     { path: '**',  redirectTo:'/not-found' }
   ]

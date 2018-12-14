@@ -31,6 +31,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatInputModule } from "@angular/material";
 import { MatCardModule } from '@angular/material/card';
+import { TestComponent } from './test/test.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { MatCardModule } from '@angular/material/card';
     PaginationPipe,
     EventDetailsComponent,
     EditEventComponent,
-    VolunteersComponent
+    VolunteersComponent,
+    TestComponent
   ],
   imports: [
     BrowserModule,
