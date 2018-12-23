@@ -3,6 +3,7 @@ import { Event } from '../../../models/event';
 import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { DataService } from 'src/app/services/data.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { promise } from 'protractor';
 
 @Component({
   selector: 'app-edit-event',
@@ -73,6 +74,8 @@ export class EditEventComponent implements OnInit {
   tags: any[];
   vehiclesArr: any[];
   vehicles;
+  
+  spinner: boolean = true;
 
   constructor(private dataService: DataService, private route:ActivatedRoute, private fb: FormBuilder, private router: Router) { }
 
@@ -92,12 +95,14 @@ export class EditEventComponent implements OnInit {
   }
 
   fetchConfig(id){
-    this.dataService.fetchConfig().subscribe((config: any)=> {
+    this.dataService.fetchConfig().subscribe(async (config: any)=> {
       this.config = config;
       this.setVehicles(config.vehicles);
       this.setTags(config.tags);
       this.setVolunteersTypes(config.volunteersTypes)
-      this.handleForm(id);
+      if(await this.handleForm(id)){
+        this.spinner = false;
+      }
     })
   }
 
@@ -123,18 +128,25 @@ export class EditEventComponent implements OnInit {
   }
 
   handleForm(id){
-    console.log(this.form, 'form');
-    if(id != 0 ){
-      this.dataService.fetchEvent(id).subscribe(
-        (event: Event) =>{
-            console.log(event);
-           setTimeout(()=>this.setForm(event), 0)})
-    }
-    else{
-      this.isNew = true;
-      this.resetForm();
-    }
-  }
+    return new Promise((resolve, reject) => {
+      console.log(this.form, 'form');
+      if(id != 0 ){
+
+        this.dataService.fetchEvent(id).subscribe(
+          (event: Event) =>{
+              console.log(event);
+            setTimeout(()=>{
+              this.setForm(event);
+              resolve(true);
+            }, 0)})
+      }
+      else{
+        this.isNew = true;
+        this.resetForm();
+        resolve(true);
+      }
+  });
+}
   
   setForm(data: Event){
     // console.log(data, 'event');
