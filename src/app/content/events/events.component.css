@@ -15,6 +15,7 @@
     border-collapse:separate; 
     border-spacing:0 1em;
     table-layout: fixed;
+    width: 100%;
 }
 
 .events-table tr {

@@ -39,4 +39,8 @@ export class DataService {
   pushEvent(event){
     return this.http.post('https://admin-interface-dev.firebaseio.com/events.json', event);
   }
+
+  updateEvent(id, event){
+    return this.http.put(`https://admin-interface-dev.firebaseio.com/events/${id}.json`, event);
+  }
 }

@@ -51,9 +51,9 @@
           
               <tbody>
                 <tr class="pointer" [routerLink]="['/', item.key ,'event']" *ngFor="let item of filteredData | pagination: maxRows:currentPage; let i = index">
-                  <td>1</td>
+                  <td>מחפש צוות או צוות</td>
                   <td> {{ config.eventTypes[item.type].translation }} </td>
-                  <td>{{ item.time.date }}</td>
+                  <td>{{ item.time.date | date:'dd/MM/yyyy' }} {{ item.time.time }} </td>
                   <td style="direction: rtl;">  
                       <ol>
                         <li  *ngFor="let x of item.locations">{{ x.street + ' ' + x.houseNum + ', ' +x.city }} </li>

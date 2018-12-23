@@ -27,6 +27,12 @@
     cursor: pointer;
 }
 
+.tags-wrapper .mat-form-field-wrapper, .tags-wrapper .mat-input-wrapper-btn {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 
 
 .events-table-wrapper::-webkit-scrollbar-track

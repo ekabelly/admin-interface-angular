@@ -9,6 +9,13 @@ form {
     font-weight: 700;
 }
 
+.form-section {
+    border-radius: 1em;
+    padding: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
 .form-section, .form-section div {
     background-color: gainsboro;
 }
@@ -68,6 +75,10 @@ input[type=checkbox] {
 
 .mat-input-wrapper-btn button {
     width: 20%;
+}
+
+.btn-form-section {
+    margin-top: 2em;
 }
 
 .btn-form-section button.btn {

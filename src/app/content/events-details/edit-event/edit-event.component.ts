@@ -11,6 +11,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 })
 export class EditEventComponent implements OnInit {
   event: Event;
+  eventId;
   isNew:boolean = false; // default is edit mode
   form: FormGroup = this.fb.group({
     'volunteersTypes': this.fb.group({
@@ -76,8 +77,10 @@ export class EditEventComponent implements OnInit {
   constructor(private dataService: DataService, private route:ActivatedRoute, private fb: FormBuilder, private router: Router) { }
 
   ngOnInit() {
-    this.route.parent.params.subscribe((params:Params) =>
-      this.fetchConfig(params['id']))
+    this.route.parent.params.subscribe((params:Params) => {
+      this.eventId = params['id']
+      this.fetchConfig(params['id'])
+    });
   }
 
   createLocation(){
@@ -135,7 +138,7 @@ export class EditEventComponent implements OnInit {
   
   setForm(data: Event){
     // console.log(data, 'event');
-    const isDate = data.time.date;
+    this.addLocation(data.locations.length - 1);
     this.form.patchValue({
       type: this.config.eventTypes[data.type],
       'volunteersNum':  {
@@ -146,24 +149,29 @@ export class EditEventComponent implements OnInit {
       title: data.title || '',
       desc: data.desc || '',
       time: {
-        date: isDate ? data.time.date : null,
-        time: isDate ? data.time.date : null,
+        date:  data.time.date || null,
+        time:  data.time.time || null,
         duration: this.config.duration[data.time.duration].name || 'oneTime'
       },
       urgent: data.urgent || false,
-      locationTypes: data.locations.length > 2 ? 'multiple' : data.locations.length < 2 ? 'single' : 'dou' || 'single',
+      locationTypes: (data.locations.length > 2 ? 'multiple' : data.locations.length < 2 ? 'single' : 'dou') || 'single',
       locations: data.locations || [{}]
     });
-    data.tags.forEach((tag)=>
-      this.markTag(tag));
-    data.volunteersTypes.forEach((x: number)=>
-      this.form.get('volunteersTypes').get(this.config.volunteersTypes[x].name).patchValue(true));
+    if(data.tags){
+      data.tags.forEach((tag)=>
+        this.markTag(tag));
+    }
+    if(data.volunteersTypes){
+      data.volunteersTypes.forEach((x: number)=>
+        this.form.get('volunteersTypes').get(this.config.volunteersTypes[x].name).patchValue(true));
+    }
 
-    data.vehicles.forEach((vehicleNum)=>{
-      let x = this.config.vehicles[vehicleNum].name;
-      this.form.get('vehicles').get(x).patchValue(true);
-    })
-    // this.form.patchValue({time:{dates:[new Date().toISOString().slice(0, 10)]}});
+    if(data.vehicles){
+      data.vehicles.forEach((vehicleNum)=>{
+        let x = this.config.vehicles[vehicleNum].name;
+        this.form.get('vehicles').get(x).patchValue(true);
+      })
+    }
   }
 
   changeLocationNum(locationType){
@@ -237,6 +245,7 @@ export class EditEventComponent implements OnInit {
         },
         locationTypes:'single'
       });
+      this.changeLocationNum('single'); //resets the location controls arr to single location
     }
   }
 
@@ -276,16 +285,22 @@ export class EditEventComponent implements OnInit {
       volunteersTypes: this.transformVolunteerTypes(),
       type: type.name === 'open' ? 0 : 1,
       time: {
-        date: [time.date],
+        date: time.date,
         time: time.time,
         duration: time.duration === 'oneTime' ? 0 : 1
       },
       volunteers: volunteersNum
     }
     console.log(event, 'save');
-    this.dataService.pushEvent(event).subscribe(res=>{
-      console.log(res);
-      // this.router.navigate(['/events']);
+    if(this.isNew){
+      return this.dataService.pushEvent(event).subscribe(res=>{
+        console.log(res, 'created');
+        this.router.navigate(['/events']);
+      });
+    }
+    return this.dataService.updateEvent(this.eventId, event).subscribe(res=>{
+      console.log(res, 'updated');
+      this.router.navigate(['/events']);
     });
   }
 }

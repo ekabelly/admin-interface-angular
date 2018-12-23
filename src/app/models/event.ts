@@ -34,8 +34,8 @@ export interface Event {
     locations: Location[],
     time: {
         date: Date,
-        duration: number,
-        frequency: string
+        time: string,
+        duration: number
     },
     urgent: boolean,
     volunteersTypes: number[]

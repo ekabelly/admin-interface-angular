@@ -34,7 +34,7 @@ header {
     z-index: 1000;
 }
 
-@media screen and (min-width: 768px) {
+@media (min-width: 768px) {
     .myNav {
         width: 80%;
     }

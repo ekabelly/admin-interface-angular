@@ -18,12 +18,6 @@ export class EventsComponent implements OnInit {
   constructor(private dataService: DataService, private filterService: FilterService) { }
 
   ngOnInit() {
-    // this.dataService.fetchComments().subscribe(
-    //   (data) =>{
-    //     this.filteredData = data; 
-    //     this.data = data; 
-    //     this.isData = true;
-    //   });
       this.dataService.fetchConfig().subscribe(
         config=>{
           this.config = config;
